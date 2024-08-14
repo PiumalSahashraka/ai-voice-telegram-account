@@ -1,0 +1,15 @@
+# Ignore Python compiled files
+*.pyc
+__pycache__/
+
+# Ignore virtual environment directories
+venv/
+ENV/
+
+# Ignore environment variables
+.env
+*.session
+downloads/
+
+# Ignore VSCode settings
+.vscode/
