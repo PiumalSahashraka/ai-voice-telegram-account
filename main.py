@@ -1,9 +1,8 @@
 from telethon import TelegramClient, events
 import os
 from config import Config
-import voice_to_text
-
-
+import generator.voice_to_text as voice_to_text
+import generator.response_generator
 
 download_path = 'downloads'
 client = TelegramClient(Config.PHONE_NUMBER, Config.API_ID, Config.API_HASH)
@@ -20,16 +19,19 @@ async def handle_message(event: events.NewMessage.Event):
         
         # Download the file
         await event.message.download_media(file=filepath)
-        text = voice_to_text.translate(filepath)
+        text = voice_to_text.translate(filepath, event.message.sender.first_name)
         await client.send_message(event.chat_id, text)
 
 
 async def main():
-    # Create a new instance of the client
     await client.start(phone = Config.PHONE_NUMBER)
     print("listening for new voice messages...")
     await client.run_until_disconnected()
 
 with client:
-    client.loop.run_until_complete(main())
+    try:
+        task = client.loop.run_until_complete(main()) 
+    except KeyboardInterrupt:
+        task.cancel()
+        print("Exiting...") 
  

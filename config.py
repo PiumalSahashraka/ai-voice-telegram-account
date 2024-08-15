@@ -7,3 +7,4 @@ class Config:
     API_HASH = os.getenv('API_HASH')
     PHONE_NUMBER = os.getenv('PHONE_NUMBER')
     DG_API_KEY = os.getenv('DG_API_KEY')
+    GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')

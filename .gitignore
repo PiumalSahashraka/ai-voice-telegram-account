@@ -10,6 +10,7 @@ ENV/
 .env
 *.session
 downloads/
+*.db
 
 # Ignore VSCode settings
 .vscode/
