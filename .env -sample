@@ -1,0 +1,5 @@
+API_ID = 12345
+API_HASH = "your api_hash"
+PHONE_NUMBER = "phone number in international_format"
+DG_API_KEY = "your deepgram api key"
+GEMINI_API_KEY = "gemini api key"
