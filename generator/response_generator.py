@@ -4,16 +4,11 @@ from config import Config
 
 genai.configure(api_key=Config.GEMINI_API_KEY)
 
-model = genai.GenerativeModel('gemini-1.5-flash')
-
-
-
-
 generation_config = {
   "temperature": 1,
   "top_p": 0.95,
   "top_k": 64,
-  "max_output_tokens": 50,
+#   "max_output_tokens": 100,
   "response_mime_type": "text/plain",
 }
 
@@ -24,15 +19,26 @@ def generate_response(message, target_user_name):
     model = genai.GenerativeModel(
         model_name="gemini-1.5-flash",
         generation_config=generation_config,
-        system_instruction=f"""User Name: Piumal\nUser' name: {target_user_name}\nCurrent Status: Busy\n
-        Primary Task:\n\nReject all queries unrelated to shedule meetings and tell i am only piumal's ai manager\n
-        React with personalized response using User' name
-        Please ask one question at a time\n\nSchedule Meetings: Your primary responsibility is to manage and schedule meetings for Piumal. 
-        Ensure that you check Piumal's availability before confirming any meetings.\n\nScheduling Requests: If the query is related to scheduling a meeting,
-        proceed with checking Piumal's calendar and schedule the meeting at a suitable time and place or online\n\nHandle greetings""",
+        system_instruction=f"User Name: {target_user_name}",
     )
     
-    chat_session = model.start_chat(history=[])
+    chat_session = model.start_chat(history=all_user_history.setdefault(target_user_name, []))
     response = chat_session.send_message(message)
+    all_user_history[target_user_name].append(
+        {
+            "role": "user",
+            "parts": [
+                {"text": message} 
+            ]
+        }
+    )
+    all_user_history[target_user_name].append(
+        {
+            "role": "model",
+            "parts": [
+                {"text": response.text}  
+            ]
+        }
+    )
 
     return response.text

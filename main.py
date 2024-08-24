@@ -2,7 +2,6 @@ from telethon import TelegramClient, events
 import os
 from config import Config
 import generator.voice_to_text as voice_to_text
-import generator.response_generator
 
 download_path = 'downloads'
 client = TelegramClient(Config.PHONE_NUMBER, Config.API_ID, Config.API_HASH)
@@ -16,7 +15,7 @@ async def handle_message(event: events.NewMessage.Event):
          # Define a filename
         filename = f"voice_message_{event.message.id}.ogg"
         filepath = os.path.join(download_path, filename)
-        
+
         # Download the file
         await event.message.download_media(file=filepath)
         text = voice_to_text.translate(filepath, event.message.sender.first_name)
@@ -29,9 +28,5 @@ async def main():
     await client.run_until_disconnected()
 
 with client:
-    try:
-        task = client.loop.run_until_complete(main()) 
-    except KeyboardInterrupt:
-        task.cancel()
-        print("Exiting...") 
+    task = client.loop.run_until_complete(main()) 
  

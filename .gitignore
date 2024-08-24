@@ -9,6 +9,7 @@ ENV/
 # Ignore environment variables
 .env
 *.session
+*.session-journal
 downloads/
 *.db
 
